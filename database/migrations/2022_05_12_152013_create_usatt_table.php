@@ -15,7 +15,7 @@ return new class extends Migration
     {
         Schema::create('usatt', function (Blueprint $table) {
             $table->id();
-            $table->audid('attid');
+            $table->audid();
             $table->userid();
             $table->smallInteger('attleft');
             $table->dateTime('attnext')->nullable();

@@ -1,5 +1,6 @@
-<x-layout :title="$title" :page-title="$pageTitle" :default-title="$defaultTitle">
+<x-layout :title="$title" :page-title="$pageTitle" :default-title="$defaultTitle" {{ $attributes }}>
   <x-slot name="scripts">
+    <script src="{{ mix('assets/dashboard.js') }}"></script>
     {{ $scripts ?? null }}
   </x-slot>
   <x-slot name="styles">
@@ -13,8 +14,7 @@
         <span class="navbar-toggler-icon"></span>
       </button>
       <div class="collapse navbar-collapse" id="navbarSupportedContent">
-        <x-navbar-menu group="db"></x-navbar-menu>
-        <x-navbar-menu group="acc" end="true"></x-navbar-menu>
+        <x-navbar-menu group="ac" end="true"></x-navbar-menu>
       </div>
     </nav>
   </header>

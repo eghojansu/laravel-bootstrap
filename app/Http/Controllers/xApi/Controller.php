@@ -9,5 +9,10 @@ abstract class Controller extends ControllersController
 {
     public function __construct(
         protected Api $api,
-    ) {}
+    ) {
+        $this->init();
+    }
+
+    protected function init()
+    {}
 }

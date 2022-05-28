@@ -16,14 +16,25 @@ class RoleSeeder extends Seeder
      */
     public function run()
     {
+        $perms = cconst(Acperm::class, 'PERM_');
+        $su = array('roleid' => 'su');
+
         Acrole::upsert(array(
-            array('roleid' => 'su'),
+            $su,
         ), array('roleid'));
-        Acperm::upsert(array(
-            array('permid' => Acperm::PERM_ADM),
+        Acperm::upsert(array_reduce(
+            $perms,
+            static fn (array|null $rows, string $permid) => array_merge(
+                $rows ?? array(),
+                array(compact('permid')),
+            ),
         ), array('permid'));
-        Acrolep::upsert(array(
-            array('roleid' => 'su', 'permid' => Acperm::PERM_ADM),
-        ), array('permid', 'roleid'));
+        Acrolep::upsert(array_reduce(
+            $perms,
+            static fn (array|null $rows, string $permid) => array_merge(
+                $rows ?? array(),
+                array($su + compact('permid')),
+            ),
+        ), array('roleid', 'permid'));
     }
 }

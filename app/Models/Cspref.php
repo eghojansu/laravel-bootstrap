@@ -2,22 +2,26 @@
 
 namespace App\Models;
 
-use App\Extensions\BlameableTrait;
-use App\Extensions\AuditableInterface;
-use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\SoftDeletes;
+use App\Extended\Model;
 
-class Cspref extends Model implements AuditableInterface
+/**
+ * @property mixed $value
+ */
+class Cspref extends Model
 {
-    use SoftDeletes, BlameableTrait;
-
-    protected $table = 'cspref';
     protected $fillable = array(
         'name',
         'content',
     );
-    protected $hidden = array();
     protected $casts = array(
         'content' => 'array',
     );
+
+    public function getValueAttribute()
+    {
+        return match($this->content['type'] ?? null) {
+            'int', 'integer' => intval($this->content['value'] ?? 0),
+            default => $this->content['value'] ?? null,
+        };
+    }
 }

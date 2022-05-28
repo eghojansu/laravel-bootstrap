@@ -1,5 +1,5 @@
 import Swal from 'sweetalert2'
-import { getColor } from './style'
+import { getColor } from './dom'
 
 export const confirm = (action, {
   title = 'Are you sure?',
@@ -14,7 +14,7 @@ export const confirm = (action, {
   confirmButtonColor: getColor('bs-danger'),
   showLoaderOnConfirm: true,
   allowOutsideClick: false,
-  preConfirm: action,
+  preConfirm: action || (() => ({ message: 'OK', success: true })),
   ...options
 })
 

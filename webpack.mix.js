@@ -1,6 +1,7 @@
 require('dotenv').config()
 
 const mix = require('laravel-mix')
+const dev = ['local', 'dev', 'development'].includes(process.env.APP_ENV)
 const url = process.env.APP_URL
   .replace('${SERVER_HOST}', process.env.SERVER_HOST)
   .replace('${SERVER_PORT}', process.env.SERVER_PORT)
@@ -17,21 +18,10 @@ const url = process.env.APP_URL
  */
 
 mix
-  .webpackConfig({
-    resolve: {
-      alias: {
-        "react": "preact/compat",
-        "react-dom/test-utils": "preact/test-utils",
-        "react-dom": "preact/compat",     // Must be below test-utils
-        "react/jsx-runtime": "preact/jsx-runtime",
-      },
-    },
-  })
   .js('resources/js/shared.js', 'public/assets')
+  .js('resources/js/dashboard.js', 'public/assets')
   .sass('resources/css/shared.sass', 'public/assets')
-  .js('resources/app/index.js', 'public/assets/app.js')
-  .sass('resources/app/styles.sass', 'public/assets/app.css')
-  .sourceMaps(['local', 'dev', 'development'].includes(process.env.APP_ENV))
+  .sourceMaps(dev)
   .browserSync({
     proxy: url,
     open: false,

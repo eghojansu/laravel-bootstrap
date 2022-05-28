@@ -1,8 +1,8 @@
 {
     "name": "ekok/laravel-bootstrap",
     "type": "project",
-    "description": "The Laravel Framework with Preact and Bootstrap",
-    "keywords": ["framework", "laravel", "preact", "bootstrap"],
+    "description": "The Laravel Framework with Bootstrap",
+    "keywords": ["framework", "laravel", "bootstrap"],
     "license": "proprietary",
     "require": {
         "php": "^8.0.2",

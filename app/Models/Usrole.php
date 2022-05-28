@@ -2,20 +2,12 @@
 
 namespace App\Models;
 
-use App\Extensions\BlameableTrait;
-use App\Extensions\AuditableInterface;
-use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\SoftDeletes;
+use App\Extended\Model;
 
-class Usrole extends Model implements AuditableInterface
+class Usrole extends Model
 {
-    use SoftDeletes, BlameableTrait;
-
-    protected $table = 'usrole';
     protected $fillable = array(
         'roleid',
         'userid',
     );
-    protected $hidden = array();
-    protected $casts = array();
 }

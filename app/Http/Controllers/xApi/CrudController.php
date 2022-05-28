@@ -16,25 +16,20 @@ abstract class CrudController extends Controller
     /** @var Crud */
     protected $crud;
 
-    public function __construct()
-    {
-        $this->crud = $this->createCrud();
-    }
-
     public function home()
     {
         if (request()->query->has('search')) {
-            return $this->data($this->crud->search());
+            return $this->api->data($this->crud->search());
         }
 
-        return $this->data($this->crud->cursor());
+        return $this->api->data($this->crud->cursor());
     }
 
     public function create()
     {
         $this->crud->create($this->getData());
 
-        return $this->saved();
+        return $this->api->saved();
     }
 
     public function update($id)
@@ -42,7 +37,7 @@ abstract class CrudController extends Controller
         $model = $this->crud->load($id);
         $model->update($this->getData($model));
 
-        return $this->saved();
+        return $this->api->saved();
     }
 
     public function delete($id)
@@ -50,12 +45,22 @@ abstract class CrudController extends Controller
         $model = $this->crud->load($id);
         $model->delete();
 
-        return $this->deleted();
+        return $this->api->deleted();
+    }
+
+    protected function init()
+    {
+        $this->crud = $this->createCrud();
     }
 
     protected function createCrud(): Crud
     {
-        return new Crud($this->getModelClass(), $this->getModelKey());
+        return new Crud(
+            $this->getModelClass(),
+            $this->getModelKey(),
+            Crud::DEFAULT_SIZE,
+            $this->getFilter(),
+        );
     }
 
     protected function getData(Model $model = null): array
@@ -68,6 +73,11 @@ abstract class CrudController extends Controller
     protected function getValidation(Model $model = null): array
     {
         return array();
+    }
+
+    protected function getFilter(): \Closure
+    {
+        return static fn () => null;
     }
 
     protected function getModelKey(): string

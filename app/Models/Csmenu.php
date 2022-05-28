@@ -2,20 +2,13 @@
 
 namespace App\Models;
 
-use App\Extensions\BlameableTrait;
-use App\Extensions\AuditableInterface;
-use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\SoftDeletes;
+use App\Extended\Model;
 
-class Csmenu extends Model implements AuditableInterface
+class Csmenu extends Model
 {
-    use SoftDeletes, BlameableTrait;
-
     const SEPARATOR = '--sep';
 
-    protected $table = 'csmenu';
     protected $fillable = array();
-    protected $hidden = array();
     protected $casts = array(
         'attrs' => 'array',
         'args' => 'array',

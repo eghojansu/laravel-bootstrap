@@ -2,51 +2,46 @@
 
 namespace App\Models;
 
+use App\Extended\Model;
 use Laravel\Sanctum\HasApiTokens;
-use App\Extensions\AuditableInterface;
+use Illuminate\Auth\MustVerifyEmail;
 use Illuminate\Notifications\Notifiable;
-use Illuminate\Contracts\Auth\MustVerifyEmail;
-use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Foundation\Auth\User as Authenticatable;
+use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Contracts\Auth\Authenticatable;
+use Illuminate\Contracts\Auth\CanResetPassword;
+use Illuminate\Contracts\Auth\Access\Authorizable;
+use Illuminate\Auth\Authenticatable as AuthAuthenticatable;
+use Illuminate\Foundation\Auth\Access\Authorizable as AccessAuthorizable;
+use Illuminate\Auth\Passwords\CanResetPassword as PasswordsCanResetPassword;
 
-class User extends Authenticatable implements AuditableInterface
+class User extends Model implements Authenticatable, Authorizable, CanResetPassword
 {
-    use HasApiTokens, HasFactory, Notifiable;
+    use
+        HasApiTokens,
+        Notifiable,
+        AuthAuthenticatable,
+        AccessAuthorizable,
+        PasswordsCanResetPassword,
+        MustVerifyEmail;
 
-    /**
-     * The attributes that are mass assignable.
-     *
-     * @var array<int, string>
-     */
-    protected $fillable = [
+    protected $table = 'users';
+    protected $fillable = array(
         'userid',
         'name',
         'email',
         'password',
         'active',
         'joindt',
-    ];
-
-    /**
-     * The attributes that should be hidden for serialization.
-     *
-     * @var array<int, string>
-     */
-    protected $hidden = [
+    );
+    protected $hidden = array(
         'password',
         'remember_token',
-    ];
-
-    /**
-     * The attributes that should be cast.
-     *
-     * @var array<string, string>
-     */
-    protected $casts = [
+        'email_verified_at',
+    );
+    protected $casts = array(
         'email_verified_at' => 'datetime',
         'joindt' => 'datetime',
-    ];
-
+    );
     private $permissionsCache = array();
 
     public function publish(): array
@@ -95,5 +90,26 @@ class User extends Authenticatable implements AuditableInterface
     public function attempts()
     {
         return $this->hasMany(Usatt::class, 'userid', 'userid');
+    }
+
+    public function activities()
+    {
+        return $this->hasMany(Usact::class, 'userid', 'userid');
+    }
+
+    public function getActiveAttempt(string $ip, string $agent): Usatt|null
+    {
+        return $this->attempts()->where('active', 1)->where('ip', $ip)->where('agent', $agent)->first();
+    }
+
+    public function newAttempt(int $attleft, string $ip, string $agent): Usatt
+    {
+        $attempt = new Usatt(compact('attleft', 'ip', 'agent') + array(
+            'active' => 1,
+        ));
+
+        $this->attempts()->save($attempt);
+
+        return $attempt;
     }
 }

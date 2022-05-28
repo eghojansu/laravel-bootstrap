@@ -2,24 +2,17 @@
 
 namespace App\Models;
 
-use App\Extensions\AuditableInterface;
-use App\Extensions\BlameableTrait;
-use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\SoftDeletes;
+use App\Extended\Model;
 
-class Acperm extends Model implements AuditableInterface
+class Acperm extends Model
 {
-    use SoftDeletes, BlameableTrait;
+    const PERM_ADM_PREF = 'adm.pref';
+    const PERM_ADM_USER = 'adm.user';
 
-    const PERM_ADM = 'adm';
-
-    protected $table = 'acperm';
     protected $fillable = array(
         'permid',
         'descrip',
     );
-    protected $hidden = array();
-    protected $casts = array();
 
     public function roles()
     {

@@ -2,7 +2,7 @@
 
 /** Check if current environment is development */
 function is_dev(): bool {
-    return app()->environment('local', 'dev', 'development');
+    return in_array(env('APP_ENV', 'production'), array('local', 'dev', 'development'));
 }
 
 /** Return $class if $route match current request route */
@@ -28,7 +28,18 @@ function cdata(array $source, array $renames = null, array $ignores = null): arr
     return $data;
 }
 
-/** Get class name without namespace prefixed */
+/** Get $class name without namespace prefixed */
 function cname(string $class): string {
     return ltrim(strrchr('\\' . $class, '\\'), '\\');
+}
+
+/** Get $class constansts filtered by optional $prefix */
+function cconst(string|object $class, string $prefix = null): array {
+    $const = (new ReflectionClass($class))->getConstants();
+
+    return $prefix ? array_filter(
+        $const,
+        static fn (string $name) => str_starts_with($name, $prefix),
+        ARRAY_FILTER_USE_KEY,
+    ) : $const;
 }

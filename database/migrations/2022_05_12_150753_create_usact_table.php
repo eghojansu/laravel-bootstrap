@@ -15,6 +15,7 @@ return new class extends Migration
     {
         Schema::create('usact', function (Blueprint $table) {
             $table->id();
+            $table->audid();
             $table->string('activity');
             $table->userid()->nullable();
             $table->recordable();

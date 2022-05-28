@@ -24,26 +24,26 @@ class Api
 
     public function data(\JsonSerializable|array $data = null, string $message = null): array
     {
-        return $this->json(trans($message), $data);
+        return $this->json(trans($message ?? ''), $data);
     }
 
     public function saved(\JsonSerializable|array $data = null): array
     {
-        return $this->json('data.saved', $data);
+        return $this->json(trans('data.saved'), $data);
     }
 
     public function updated(\JsonSerializable|array $data = null): array
     {
-        return $this->json('data.updated', $data);
+        return $this->json(trans('data.updated'), $data);
     }
 
     public function restored(\JsonSerializable|array $data = null): array
     {
-        return $this->json('data.restored', $data);
+        return $this->json(trans('data.restored'), $data);
     }
 
     public function deleted(\JsonSerializable|array $data = null): array
     {
-        return $this->json('data.deleted', $data);
+        return $this->json(trans('data.deleted'), $data);
     }
 }

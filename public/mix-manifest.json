@@ -1,6 +1,5 @@
 {
     "/assets/shared.js": "/assets/shared.js",
-    "/assets/app.js": "/assets/app.js",
-    "/assets/app.css": "/assets/app.css",
+    "/assets/dashboard.js": "/assets/dashboard.js",
     "/assets/shared.css": "/assets/shared.css"
 }

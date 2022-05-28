@@ -2,16 +2,10 @@
 
 namespace App\Models;
 
-use App\Extensions\BlameableTrait;
-use App\Extensions\AuditableInterface;
-use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\SoftDeletes;
+use App\Extended\Model;
 
-class Usact extends Model implements AuditableInterface
+class Usact extends Model
 {
-    use SoftDeletes, BlameableTrait;
-
-    protected $table = 'usact';
     protected $fillable = array(
         'activity',
         'ip',
@@ -19,7 +13,6 @@ class Usact extends Model implements AuditableInterface
         'payload',
         'active',
     );
-    protected $hidden = array();
     protected $casts = array(
         'payload' => 'array',
     );

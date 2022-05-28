@@ -2,18 +2,11 @@
 
 namespace App\Models;
 
-use App\Extensions\BlameableTrait;
-use App\Extensions\AuditableInterface;
-use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\SoftDeletes;
+use App\Extended\Model;
 
-class Usatt extends Model implements AuditableInterface
+class Usatt extends Model
 {
-    use SoftDeletes, BlameableTrait;
-
-    protected $table = 'usatt';
     protected $fillable = array(
-        'attid',
         'attleft',
         'attnext',
         'ip',
@@ -21,7 +14,6 @@ class Usatt extends Model implements AuditableInterface
         'payload',
         'active',
     );
-    protected $hidden = array();
     protected $casts = array(
         'payload' => 'array',
         'attnext' => 'datetime',
@@ -29,11 +21,23 @@ class Usatt extends Model implements AuditableInterface
 
     public function isLocked(): bool
     {
-        return $this->attnext && $this->attnext > new \DateTime();
+        return $this->attnext && $this->attnext > now();
     }
 
-    public function noAttemptLeft(): bool
+    public function increase(int $max = 3, int $next = 5): bool
     {
-        return $this->attleft < 1;
+        $this->attleft = $this->attnext ? $max - 1 : max(0, $this->attleft - 1);
+        $this->attnext = 0 === $this->attleft ? now()->addMinutes($next) : (
+            $this->attnext && !$this->isLocked() ? null : $this->attnext
+        );
+
+        return $this->save();
+    }
+
+    public function deactivate(): bool
+    {
+        $this->active = 0;
+
+        return $this->save();
     }
 }

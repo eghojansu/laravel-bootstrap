@@ -2,22 +2,14 @@
 
 namespace App\Models;
 
-use App\Extensions\BlameableTrait;
-use App\Extensions\AuditableInterface;
-use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\SoftDeletes;
+use App\Extended\Model;
 
-class Acrole extends Model implements AuditableInterface
+class Acrole extends Model
 {
-    use SoftDeletes, BlameableTrait;
-
-    protected $table = 'acrole';
     protected $fillable = array(
         'roleid',
         'descrip',
     );
-    protected $hidden = array();
-    protected $casts = array();
 
     public function perms()
     {

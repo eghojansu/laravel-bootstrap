@@ -7,7 +7,7 @@
   <link rel="stylesheet" href="{{ mix('assets/shared.css') }}">
   {{ $styles ?? null }}
 </head>
-<body>
+<body {{ $attributes }}>
   <noscript>Please enable Javascript in your browser</noscript>
 
   {{ $slot }}
