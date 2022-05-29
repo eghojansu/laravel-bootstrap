@@ -1,45 +1,71 @@
 <?php
 
-namespace App\Service;
+namespace App\States;
 
 use App\Models\User;
 use App\Models\Usact;
+use App\Services\Api;
 use App\Models\Acperm;
 use App\Models\Acrole;
-use App\Service\Api;
-use Illuminate\Support\Facades\Auth;
+use App\Extended\Model;
+use App\Services\Preference;
 use Illuminate\Support\Facades\Hash;
 
 class Account
 {
-    private $cache = array();
+    const AUDIT_CREATE = 'create';
+    const AUDIT_UPDATE = 'update';
+    const AUDIT_DELETE = 'delete';
+    const AUDIT_RESTORE = 'restore';
+
+    const URL_BACK = 'back_url';
+
+    private $permissions = array();
 
     public function __construct(
-        private Api $api,
         private Preference $preference,
+        private Api $api,
     ) {}
 
-    public function allowed(string ...$permissions): bool
+    public function urlBackSave(): static
+    {
+        session(array(
+            self::URL_BACK => request()->fullUrl(),
+        ));
+
+        return $this;
+    }
+
+    public function urlBackGet(): string|null
+    {
+        $session = session();
+        $backUrl = $session->get(self::URL_BACK);
+
+        $session->remove(self::URL_BACK);
+
+        return $backUrl;
+    }
+
+    public function user(): User|null
     {
         /** @var User|null */
         $user = auth()->user();
 
-        if (!$user) {
+        return $user;
+    }
+
+    public function allowed(string ...$permissions): bool
+    {
+        if (!$user = $this->user()) {
             return false;
         }
 
-        $cache = &$this->cache[$user->userid];
-
-        if (!$cache) {
-            $cache = array();
-        }
-
-        if (!$permissions || array_intersect($cache, $permissions)) {
+        if (!$permissions || array_intersect($this->permissions, $permissions)) {
             return true;
         }
 
         array_push(
-            $cache,
+            $this->permissions,
             ...$user->roles->reduce(
                 static function (array $perms, Acrole $role) {
                     array_push(
@@ -55,7 +81,7 @@ class Account
             ),
         );
 
-        return !!array_intersect($cache, $permissions);
+        return !!array_intersect($this->permissions, $permissions);
     }
 
     public function record(
@@ -63,8 +89,6 @@ class Account
         array $payload = null,
         bool $active = false,
     ): Usact {
-        /** @var User */
-        $user = Auth::user();
         $request = request();
         $activity = new Usact(array(
             'activity' => $activity,
@@ -74,24 +98,64 @@ class Account
             'active' => $active,
         ));
 
-        if ($user) {
-            $user->activities()->save($activity);
-        } else {
-            $activity->save();
-        }
+        $this->saveActivity($activity);
 
         return $activity;
     }
 
+    public function audit(
+        string $activity,
+        Model $model,
+    ): Usact|null {
+        if (!$model->auditable()) {
+            return null;
+        }
+
+        $request = request();
+        $recid = array_map(
+            static fn (string $name) => $model->getAttribute($name),
+            array_combine(
+                $model->getAuditKeys(),
+                $model->getAuditKeys(),
+            ),
+        );
+        $payload = match($activity) {
+            self::AUDIT_UPDATE => $model->getChanges(),
+            default => null,
+        };
+
+        $activity = new Usact(array(
+            'activity' => $activity,
+            'payload' => $payload,
+            'ip' => $request->ip(),
+            'agent' => $request->userAgent(),
+            'recid' => $recid,
+            'rectab' => $model->getTable(),
+        ));
+
+        $this->saveActivity($activity);
+
+        return $activity;
+    }
+
+    public function saveActivity(Usact $activity): bool
+    {
+        if ($user = $this->user()) {
+            return !!$user->activities()->save($activity);
+        }
+
+        return $activity->save();
+    }
+
     public function attempt(
-        string $username,
+        string $account,
         string $password,
         bool $remember = null,
     ): array {
-        $field = filter_var($username, FILTER_VALIDATE_EMAIL) ? 'email' : 'userid';
+        $field = filter_var($account, FILTER_VALIDATE_EMAIL) ? 'email' : 'userid';
 
         /** @var User */
-        $user = User::where($field, $username)->first();
+        $user = User::where($field, $account)->first();
 
         if (!$user) {
             return $this->api->fail('account.invalid');
@@ -136,10 +200,12 @@ class Account
             return $this->api->fail('account.inactive');
         }
 
-        Auth::login($user, $remember);
+        auth()->login($user, $remember);
         $this->record('login');
 
-        return $this->api->ok('account.welcome', $user->publish());
+        return $this->api->ok('account.welcome', $user->publish() + array(
+            'redirect' => $this->urlBackGet(),
+        ));
     }
 
     public function logout()

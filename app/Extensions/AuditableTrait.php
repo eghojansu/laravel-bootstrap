@@ -1,9 +1,9 @@
 <?php
 
-namespace App\Extension;
+namespace App\Extensions;
 
 use App\Models\User;
-use App\Service\Auditable;
+use App\Services\Auditable;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -14,6 +14,11 @@ trait AuditableTrait
     public static function bootAuditableTrait(): void
     {
         static::observe(app(Auditable::class));
+    }
+
+    public function auditable(): bool
+    {
+        return $this->auditable ?? true;
     }
 
     public function creator(): BelongsTo

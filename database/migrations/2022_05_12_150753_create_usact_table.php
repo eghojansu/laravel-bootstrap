@@ -18,6 +18,8 @@ return new class extends Migration
             $table->audid();
             $table->string('activity');
             $table->userid()->nullable();
+            $table->string('rectab', 64)->nullable();
+            $table->json('recid')->nullable();
             $table->recordable();
             $table->activable();
             $table->auditable();

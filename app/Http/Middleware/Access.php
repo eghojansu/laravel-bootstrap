@@ -2,7 +2,7 @@
 
 namespace App\Http\Middleware;
 
-use App\Service\Account;
+use App\States\Account;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 

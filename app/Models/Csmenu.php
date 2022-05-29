@@ -8,6 +8,7 @@ class Csmenu extends Model
 {
     const SEPARATOR = '--sep';
 
+    protected $auditKeys = array('menuid');
     protected $fillable = array();
     protected $casts = array(
         'attrs' => 'array',

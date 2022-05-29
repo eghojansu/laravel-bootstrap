@@ -6,6 +6,7 @@ use App\Extended\Model;
 
 class Acrole extends Model
 {
+    protected $auditKeys = array('roleid');
     protected $fillable = array(
         'roleid',
         'descrip',

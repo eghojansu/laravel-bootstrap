@@ -3,7 +3,7 @@
 namespace App\View\Components;
 
 use App\Models\Csmenu;
-use App\Service\Menu;
+use App\Services\Menu;
 use Illuminate\View\Component;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Support\Facades\Route;

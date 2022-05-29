@@ -25,6 +25,7 @@ class User extends Model implements Authenticatable, Authorizable, CanResetPassw
         MustVerifyEmail;
 
     protected $table = 'users';
+    protected $auditKeys = array('userid');
     protected $fillable = array(
         'userid',
         'name',

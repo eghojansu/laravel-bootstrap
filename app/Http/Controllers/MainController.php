@@ -18,20 +18,21 @@ class MainController extends Controller
 
     public function loginCheck()
     {
-        dd(request());
         $data = $this->validateWith(array(
-            'username' => 'required|string',
+            'account' => 'required|string',
             'password' => 'required|string',
             'remember' => 'nullable',
         ));
         $result = $this->account->attempt(
-            $data['username'],
+            $data['account'],
             $data['password'],
             $data['remember'],
         );
 
         if ($result['success']) {
-
+            return redirect($result['data']['redirect'])->with('success', $result['message']);
         }
+
+        return back()->with('error', $result['message']);
     }
 }

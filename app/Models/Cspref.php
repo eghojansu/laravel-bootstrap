@@ -9,6 +9,7 @@ use App\Extended\Model;
  */
 class Cspref extends Model
 {
+    protected $auditKeys = array('name');
     protected $fillable = array(
         'name',
         'content',

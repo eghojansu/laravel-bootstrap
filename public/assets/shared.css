@@ -18655,3 +18655,11 @@ textarea.form-control-lg {
 .bi-filetype-xlsx::before {
   content: "\f793";
 }
+
+.text-center .form-check {
+  display: flex;
+  justify-content: center;
+}
+.text-center .form-check label {
+  margin-left: 1rem;
+}

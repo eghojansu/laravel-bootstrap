@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Service;
+namespace App\Services;
 
 use App\Models\Cspref;
 use Illuminate\Database\Eloquent\Collection;

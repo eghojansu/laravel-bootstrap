@@ -43,3 +43,11 @@ function cconst(string|object $class, string $prefix = null): array {
         ARRAY_FILTER_USE_KEY,
     ) : $const;
 }
+
+/** Get classes from $directory */
+function cloads(string $dir, string $namespace = null): array {
+    return array_map(
+        static fn (string $file) => $namespace . '\\' . basename($file, '.php'),
+        glob($dir . '/*.php'),
+    );
+}

@@ -6,6 +6,7 @@ use App\Extended\Model;
 
 class Ussess extends Model
 {
+    protected $auditKeys = array('sessid');
     protected $fillable = array(
         'sessid',
         'ip',

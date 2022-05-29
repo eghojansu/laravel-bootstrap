@@ -1,14 +1,18 @@
 <?php
 
-namespace App\Service;
+namespace App\Services;
 
 use App\Models\User;
+use App\Extended\Model;
+use App\States\Account;
 use Illuminate\Support\Str;
-use Illuminate\Database\Eloquent\Model;
 
 class Auditable
 {
     private $uniques = array();
+
+    public function __construct(private Account $account)
+    {}
 
     public function creating(Model $model): void
     {
@@ -22,6 +26,13 @@ class Auditable
         if ($unique) {
             $model->setAttribute('uniqid', Str::random(8));
         }
+
+        $this->account->audit(Account::AUDIT_CREATE, $model);
+    }
+
+    public function updating(Model $model): void
+    {
+        $this->account->audit(Account::AUDIT_UPDATE, $model);
     }
 
     public function saving(Model $model): void
@@ -32,6 +43,8 @@ class Auditable
     public function restoring(Model $model): void
     {
         $model->setAttribute('delby', null);
+
+        $this->account->audit(Account::AUDIT_RESTORE, $model);
     }
 
     public function deleted(Model $model): void
@@ -46,6 +59,8 @@ class Auditable
         ) {
             $model->silentUpdate();
         }
+
+        $this->account->audit(Account::AUDIT_DELETE, $model);
     }
 
     private function getUserId(): string|null

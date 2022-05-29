@@ -9,6 +9,7 @@ class Acperm extends Model
     const PERM_ADM_PREF = 'adm.pref';
     const PERM_ADM_USER = 'adm.user';
 
+    protected $auditKeys = array('permid');
     protected $fillable = array(
         'permid',
         'descrip',
