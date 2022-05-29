@@ -26,13 +26,13 @@ class MainController extends Controller
         $result = $this->account->attempt(
             $data['account'],
             $data['password'],
-            $data['remember'],
+            $data['remember'] ?? false,
         );
 
         if ($result['success']) {
             return redirect($result['data']['redirect'])->with('success', $result['message']);
         }
 
-        return back()->with('error', $result['message']);
+        return back()->exceptInput('password')->with('danger', $result['message']);
     }
 }

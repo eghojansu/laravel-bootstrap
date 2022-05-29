@@ -1,5 +1,6 @@
 import Swal from 'sweetalert2'
 import { getColor } from './dom'
+import 'sweetalert2/src/sweetalert2.scss'
 
 export const confirm = (action, {
   title = 'Are you sure?',

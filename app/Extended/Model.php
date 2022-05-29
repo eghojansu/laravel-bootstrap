@@ -17,6 +17,9 @@ abstract class Model extends EloquentModel
     /** @var array|null */
     protected $auditKeys;
 
+    /** @var bool|null */
+    protected $auditable;
+
     public function getTable()
     {
         return $this->table ?? strtolower(cname(static::class));

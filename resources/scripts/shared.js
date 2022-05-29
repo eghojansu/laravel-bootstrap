@@ -1,5 +1,6 @@
 import * as bootstrap from 'bootstrap'
-import * as lib from '../js-lib'
+import * as lib from './lib'
+import './common.sass'
 
 window.bootstrap = bootstrap
 window.lib = lib

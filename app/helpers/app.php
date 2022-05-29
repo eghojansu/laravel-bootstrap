@@ -15,6 +15,46 @@ function clsu(string $path, string $class = null): string|null {
     return request()->is($path) ? ($class ?? 'active') : null;
 }
 
+/** Render element $attrs */
+function clsr(array $attrs): string|null {
+    $str = '';
+    $arr = static function(string $prop, array $value) {
+        $line = '';
+
+        if ('class' !== $prop) {
+            array_walk($value, static function ($value, $key) use ($prop, &$line) {
+                $line .= ' data-' . $prop . '-' . $key . '=' . $value;
+            });
+
+            return $line;
+        }
+
+        array_walk($value, static function ($value, $key) use (&$line) {
+            if (is_numeric($key) || $value) {
+                $line .= ' ' . $value;
+            }
+        });
+
+        return $line ? ' class="' . $line . '"' : null;
+    };
+
+    foreach ($attrs as $prop => $value) {
+        if (null === $value || false === $value) {
+            continue;
+        }
+
+        if (is_numeric($prop)) {
+            $str .= ' ' . $value;
+        } elseif (is_array($value)) {
+            $str .= $arr($prop, $value);
+        } else {
+            $str .= ' ' . $prop . '="' . $value . '"';
+        }
+    }
+
+    return $str;
+}
+
 /** Collect renamed and ignored $source data */
 function cdata(array $source, array $renames = null, array $ignores = null): array {
     $data = array_diff_key($source, array_flip($ignores ?? array()));

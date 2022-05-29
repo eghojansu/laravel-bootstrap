@@ -1,6 +1,6 @@
 -- Db root
 INSERT INTO `csmenu` (`grp`, `parent`, `menuid`, `label`, `icon`, `route`, `attrs`, `grade`) VALUES
-('db', null, 'db', 'Dashboard', 'house', 'home', null, 1),
+('db', null, 'db', 'Dashboard', 'house', 'dashboard', null, 1),
 ('db', null, 'ad', 'Administration', 'gear', null, null, 2);
 
 INSERT INTO `csmenu` (`grp`, `parent`, `menuid`, `label`, `icon`, `route`, `perm`, `grade`) VALUES

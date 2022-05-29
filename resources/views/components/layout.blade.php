@@ -4,14 +4,15 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>{{ $_pageTitle }}</title>
-  <link rel="stylesheet" href="{{ mix('assets/shared.css') }}">
+  @client
+  @tag('shared.sass')
+  @tag('shared.js')
   {{ $styles ?? null }}
+  {{ $scripts ?? null }}
 </head>
 <body {{ $attributes }}>
   <noscript>Please enable Javascript in your browser</noscript>
 
   {{ $slot }}
-  <script src="{{ mix('assets/shared.js') }}"></script>
-  {{ $scripts ?? null }}
 </body>
 </html>
