@@ -30,4 +30,6 @@ Route::namespace('App\\Http\\Controllers')->middleware('visit')->group(function(
             Route::post('logout', 'logout')->name('logout');
         });
     });
+
+    Route::middleware('access:adm.user')->resource('user', 'UserController');
 });

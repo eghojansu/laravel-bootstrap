@@ -1,14 +1,15 @@
 <?php
 
-namespace App\Http\Controllers\Api;
+namespace App\Http\Controllers;
 
 use Illuminate\Validation\Rule;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Builder;
 
-class UserController extends CrudController
+class UserController extends Controller
 {
+    // TODO: create and use TODO
     protected $modelKey = 'userid';
 
     protected function getData(Model $model = null): array

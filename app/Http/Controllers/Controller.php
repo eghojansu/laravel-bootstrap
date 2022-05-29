@@ -21,6 +21,11 @@ abstract class Controller extends BaseController
 
     private $hive = array();
 
+    public function __construct()
+    {
+        $this->init();
+    }
+
     public function __get($name)
     {
         if (isset($this->hive[$name]) || array_key_exists($name, $this->hive)) {
@@ -32,5 +37,10 @@ abstract class Controller extends BaseController
             'pref' => app(Preference::class),
             'account' => app(Account::class),
         };
+    }
+
+    protected function init()
+    {
+        // do initialization
     }
 }
