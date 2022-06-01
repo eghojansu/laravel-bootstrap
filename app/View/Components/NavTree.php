@@ -44,39 +44,8 @@ class NavTree extends Component
         }
 
         return clsr($attrs);
-        /*
-
-<!--
-
-  const href = url ? trimEnd(`#${base}/${trimStart(url || '', '/')}`, '/') : '#'
-  const active = activeUrl === href.slice(1)
-  const props = {
-    ...(attrs || {}),
-    id,
-    href,
-    class: clsx(
-      attrs?.class,
-      'list-group-item list-group-item-action',
-      parent && 'd-flex',
-      active && 'active',
-    ),
-    'aria-current': active ? 'true' : null,
-    ...(parent ? {
-      href: `#${groupId}`,
-      'data-bs-toggle': 'collapse',
-      'aria-expanded': 'false',
-    } : {}),
-  }
--->
-
-        */
     }
 
-    /**
-     * Get the view / contents that represent the component.
-     *
-     * @return \Illuminate\Contracts\View\View|\Closure|string
-     */
     public function render()
     {
         return view('components.nav-tree');

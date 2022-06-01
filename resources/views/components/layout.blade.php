@@ -7,6 +7,7 @@
   @client
   @tag('shared.sass')
   @tag('shared.js')
+  @tag('common.js')
   {{ $styles ?? null }}
   {{ $scripts ?? null }}
 </head>

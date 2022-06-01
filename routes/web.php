@@ -20,16 +20,25 @@ Route::namespace('App\\Http\\Controllers')->middleware('visit')->group(function(
         Route::post('login', 'loginCheck');
     });
 
-    Route::middleware('auth')->group(function() {
-        Route::controller('DashboardController')->prefix('dashboard')->group(function() {
-            Route::get('', 'home')->name('dashboard');
-            Route::get('account', 'account')->name('account');
-            Route::post('account', 'accountSave');
-            Route::get('password', 'password')->name('password');
-            Route::post('password', 'passwordSave');
-            Route::post('logout', 'logout')->name('logout');
+    Route::prefix('dashboard')->group(function() {
+        Route::middleware('auth')->group(function() {
+            Route::controller('DashboardController')->group(function() {
+                Route::get('', 'home')->name('dashboard');
+                Route::get('profile', 'profile')->name('profile');
+                Route::post('profile', 'profileSave');
+                Route::get('password', 'password')->name('password');
+                Route::post('password', 'passwordSave');
+                Route::post('logout', 'logout')->name('logout');
+            });
+        });
+
+        Route::middleware('access:adm.user')->resource('user', 'UserController');
+
+        Route::controller('AdmController')->prefix('adm')->group(function() {
+            Route::middleware('access:adm.pref')->prefix('preference')->group(function() {
+                Route::get('', 'preference')->name('preference');
+                Route::post('', 'preferenceSave');
+            });
         });
     });
-
-    Route::middleware('access:adm.user')->resource('user', 'UserController');
 });

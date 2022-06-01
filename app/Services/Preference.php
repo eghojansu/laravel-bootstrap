@@ -9,6 +9,9 @@ use Illuminate\Foundation\Inspiring;
 /**
  * @property int $attMax
  * @property int $attTo
+ * @property string $dtFmt
+ * @property string $dtimeFmt
+ * @property string $tsFmt
  */
 class Preference
 {
@@ -22,6 +25,21 @@ class Preference
             'value' => 5,
             'type' => 'int',
             'desc' => 'Next minutes after account locked',
+        ),
+        'dtFmt' => array(
+            'value' => 'd/m/Y',
+            'type' => 'string',
+            'desc' => 'Date format',
+        ),
+        'dtimeFmt' => array(
+            'value' => 'd/m/Y H:i',
+            'type' => 'string',
+            'desc' => 'Date time format',
+        ),
+        'tsFmt' => array(
+            'value' => 'd/m/Y H:i:s',
+            'type' => 'string',
+            'desc' => 'Timestamp format',
         ),
     );
 
@@ -52,6 +70,18 @@ class Preference
         $by = trim(substr($source, $byDash + 1));
 
         return compact('text', 'by');
+    }
+
+    public function update(array $data): void
+    {
+        array_walk($data, function($value, $name) {
+            if ($pref = $this->get($name)) {
+                $content = $pref->content;
+                $content['value'] = $value;
+
+                $pref->update(compact('content'));
+            }
+        });
     }
 
     private function get(string $name): Cspref|null

@@ -1,22 +1,17 @@
 <x-layout page-title="Login">
   <div class="min-vh-100 d-flex justify-content-center align-items-center">
-    <form class="text-center" method="post" autocomplete="off" novalidate>
-      <h1 class="h3 mb-3 fw-normal">Please sign in</h1>
+    <x-form-container :grid="false" :submit="false" :autocomplete="false" class="text-center">
+      <x-slot name="header">
+        <h1 class="h3 mb-3 fw-normal">Please sign in</h1>
+      </x-slot>
 
-      <x-alert />
-
-      <x-form-float name="account" label="Email or username" class="mb-3">
-        <x-form-input name="account" required autofocus />
-      </x-form-float>
-      <x-form-float name="password" class="mb-3">
-        <x-form-input name="password" type="password" required />
-      </x-form-float>
-      <x-form-check name="remember" value="remember" label="Remember me" class="mb-3" />
+      <x-form-control width="-1" :float="true" mb="3" name="account" label="Email or username" required autofocus />
+      <x-form-control width="-1" :float="true" mb="3" name="password" :view="false" type="password" required />
+      <x-form-control width="-1" :float="true" mb="3" name="remember" label="Remember me" type="checkbox" />
 
       <button class="w-100 btn btn-lg btn-primary" type="submit">Sign in</button>
       <p class="mt-5 mb-3 text-muted">&copy; {{ config('app.year') }}</p>
-      @csrf
-    </form>
+    </x-form-container>
   </div>
 
   <x-slot name="styles">

@@ -13,6 +13,10 @@ class Access
 
     public function handle(Request $request, \Closure $next, string ...$permissions)
     {
+        if (!$request->user()) {
+            return redirect()->route('login');
+        }
+
         if ($this->account->allowed(...$permissions)) {
             return $next($request);
         }

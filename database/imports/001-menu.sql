@@ -13,5 +13,6 @@ INSERT INTO `csmenu` (`grp`, `parent`, `menuid`, `label`, `icon`, `route`, `attr
 
 INSERT INTO `csmenu` (`grp`, `parent`, `menuid`, `label`, `icon`, `route`, `attrs`, `grade`) VALUES
 ('ac', 'ac', 'acprof', 'Profile', 'person', 'profile', null, 1),
-('ac', 'ac', 'acsep1', '--sep', null, null, null, 2),
-('ac', 'ac', 'acout', 'Logout', 'box-arrow-right', 'logout', '{"data-confirm":"post","class":"text-danger"}', 3);
+('ac', 'ac', 'acpass', 'Password', 'key', 'password', null, 2),
+('ac', 'ac', 'acsep1', '--sep', null, null, null, 3),
+('ac', 'ac', 'acout', 'Logout', 'box-arrow-right', 'logout', '{"data-confirm":"post","class":"text-danger"}', 4);

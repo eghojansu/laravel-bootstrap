@@ -17,6 +17,7 @@ return [
                 'paths' => [
                     'resources/scripts/shared.sass',
                     'resources/scripts/shared.js',
+                    'resources/scripts/common.js',
                     'resources/scripts/dashboard.js',
                 ],
                 'ignore' => '/\\.(d\\.ts|json)$/',

@@ -31,6 +31,24 @@
     </div>
   </nav>
   <main class="db-main">
-    {{ $slot }}
+    @if ($wrap)
+      <div class="container-fluid">
+        <div class="p-3">
+          <div class="card">
+            @if ($title)
+              <div class="card-header">
+                {{ $title }}
+              </div>
+            @endif
+
+            <div class="card-body">
+              {{ $slot }}
+            </div>
+          </div>
+        </div>
+      </div>
+    @else
+      {{ $slot }}
+    @endif
   </main>
 </x-layout>

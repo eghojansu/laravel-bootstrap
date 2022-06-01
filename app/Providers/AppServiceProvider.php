@@ -2,10 +2,10 @@
 
 namespace App\Providers;
 
-use App\Extended\Blueprint as ExtendedBlueprint;
-use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\ServiceProvider;
+use Illuminate\Database\Schema\Blueprint;
+use App\Extended\Blueprint as ExtendedBlueprint;
 
 class AppServiceProvider extends ServiceProvider
 {

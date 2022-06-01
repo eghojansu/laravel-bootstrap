@@ -15,6 +15,7 @@ class Dashboard extends Component
         public string|null $pageTitle = null,
         public string|null $title = null,
         public string|null $defaultTitle = 'Dashboard',
+        public bool|null $wrap = true,
     ) {}
 
     /**

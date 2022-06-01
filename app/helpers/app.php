@@ -1,5 +1,7 @@
 <?php
 
+use App\Services\Preference;
+
 /** Check if current environment is development */
 function is_dev(): bool {
     return in_array(env('APP_ENV', 'production'), array('local', 'dev', 'development'));
@@ -30,25 +32,31 @@ function clsr(array $attrs): string|null {
         }
 
         array_walk($value, static function ($value, $key) use (&$line) {
-            if (is_numeric($key) || $value) {
+            if (is_numeric($key)) {
                 $line .= ' ' . $value;
+            } elseif ($value) {
+                $line .= ' ' . $key;
             }
         });
 
-        return $line ? ' class="' . $line . '"' : null;
+        return $line ? ' class="' . trim($line) . '"' : null;
     };
 
     foreach ($attrs as $prop => $value) {
-        if (null === $value || false === $value) {
+        $val = is_callable($value) ? $value() : $value;
+
+        if (null === $val || false === $val) {
             continue;
         }
 
         if (is_numeric($prop)) {
-            $str .= ' ' . $value;
-        } elseif (is_array($value)) {
-            $str .= $arr($prop, $value);
+            $str .= ' ' . $val;
+        } elseif (true === $val) {
+            $str .= ' ' . $prop;
+        } elseif (is_array($val)) {
+            $str .= $arr($prop, $val);
         } else {
-            $str .= ' ' . $prop . '="' . $value . '"';
+            $str .= ' ' . $prop . '="' . $val . '"';
         }
     }
 
@@ -90,4 +98,25 @@ function cloads(string $dir, string $namespace = null): array {
         static fn (string $file) => $namespace . '\\' . basename($file, '.php'),
         glob($dir . '/*.php'),
     );
+}
+
+/** Format $input date */
+function cdt(DateTime $input, string $format = null): string {
+    $fmt = $format ?? app(Preference::class)->dtFmt;
+
+    return $input->format($fmt);
+}
+
+/** Format $input datetime */
+function cdtime(DateTime $input, string $format = null): string {
+    $fmt = $format ?? app(Preference::class)->dtimeFmt;
+
+    return $input->format($fmt);
+}
+
+/** Format $input timestamp */
+function cts(DateTime $input, string $format = null): string {
+    $fmt = $format ?? app(Preference::class)->tsFmt;
+
+    return $input->format($fmt);
 }

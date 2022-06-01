@@ -13,6 +13,7 @@ use Illuminate\Contracts\Auth\Access\Authorizable;
 use Illuminate\Auth\Authenticatable as AuthAuthenticatable;
 use Illuminate\Foundation\Auth\Access\Authorizable as AccessAuthorizable;
 use Illuminate\Auth\Passwords\CanResetPassword as PasswordsCanResetPassword;
+use Illuminate\Support\Facades\Hash;
 
 class User extends Model implements Authenticatable, Authorizable, CanResetPassword
 {
@@ -30,7 +31,6 @@ class User extends Model implements Authenticatable, Authorizable, CanResetPassw
         'userid',
         'name',
         'email',
-        'password',
         'active',
         'joindt',
     );
@@ -112,5 +112,12 @@ class User extends Model implements Authenticatable, Authorizable, CanResetPassw
         $this->attempts()->save($attempt);
 
         return $attempt;
+    }
+
+    public function newPassword(string $password): bool
+    {
+        $this->password = Hash::make($password);
+
+        return $this->save();
     }
 }

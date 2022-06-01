@@ -13,7 +13,7 @@ trait FormPropTrait
 
     public function label(): string
     {
-        return $this->label ?? Str::title($this->name);
+        return $this->label ?? str_replace('_', ' ', Str::title($this->name));
     }
 
     public function hint(): string|false
